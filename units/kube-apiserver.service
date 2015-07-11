@@ -1,0 +1,35 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+
+[Service]
+ExecStartPre=-/usr/bin/mkdir -p /opt/bin
+ExecStartPre=/bin/bash -c '/usr/bin/wget -N -P /opt/bin https://storage.googleapis.com/beyondbroadcast/tmux/tmux'
+ExecStartPre=/usr/bin/chmod +x /opt/bin/tmux
+ExecStartPre=/bin/bash -c '/usr/bin/wget -N -P /opt/bin https://storage.googleapis.com/beyondbroadcast/tmux/tmux_session_start'
+ExecStartPre=/usr/bin/chmod +x /opt/bin/tmux_session_start
+ExecStartPre=-/opt/bin/tmux_session_start
+ExecStartPre=/bin/bash -c '/usr/bin/wget -N -P /opt/bin https://storage.googleapis.com/kubernetes-release/release/v0.20.2/bin/linux/amd64/kubectl'
+ExecStartPre=/usr/bin/chmod +x /opt/bin/kubectl
+ExecStartPre=/bin/bash -c '/usr/bin/wget -N -P /opt/bin https://storage.googleapis.com/kubernetes-release/release/v0.20.2/bin/linux/amd64/kube-apiserver'
+ExecStartPre=/usr/bin/chmod +x /opt/bin/kube-apiserver
+ExecStart=/opt/bin/kube-apiserver \
+ --allow_privileged=true \
+ --insecure_bind_address=0.0.0.0 \
+ --insecure_port=8080 \
+ --kubelet_https=true \
+ --secure_port=6443 \
+ --address=127.0.0.1 \
+ --service-cluster-ip-range=10.100.0.1/24 \
+ --etcd_servers=http://127.0.0.1:4001 \
+ --cors_allowed_origins=.* \
+ --logtostderr=true \
+ --service-node-port-range=25-32767 \
+ --cloud_provider=vagrant \
+ --runtime_config=api/v1
+
+Restart=always
+RestartSec=10
+
+[X-Fleet]
+MachineMetadata=role=master
