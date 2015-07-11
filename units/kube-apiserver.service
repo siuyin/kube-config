@@ -20,7 +20,6 @@ ExecStart=/opt/bin/kube-apiserver \
  --insecure_port=8080 \
  --kubelet_https=true \
  --secure_port=6443 \
- --address=127.0.0.1 \
  --service-cluster-ip-range=10.100.0.1/24 \
  --etcd_servers=http://127.0.0.1:4001 \
  --cors_allowed_origins=.* \
