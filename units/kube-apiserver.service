@@ -3,6 +3,7 @@ Description=Kubernetes API Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 
 [Service]
+TimeoutStartSec=0
 ExecStartPre=-/usr/bin/mkdir -p /opt/bin
 ExecStartPre=/bin/bash -c '/usr/bin/wget -N -P /opt/bin https://storage.googleapis.com/beyondbroadcast/tmux/tmux'
 ExecStartPre=/usr/bin/chmod +x /opt/bin/tmux
